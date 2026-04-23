@@ -30,3 +30,9 @@ export interface CityOverview {
   avgResolutionTime: number;
   slaBreachCount: number;
 }
+
+export interface DailySummary {
+  totalNewReports: number;
+  resolvedIssues: number;
+  highestDelayDistricts: { district: string; avgDelay: number }[];
+}

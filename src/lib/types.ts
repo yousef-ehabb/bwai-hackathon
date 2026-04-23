@@ -9,7 +9,7 @@ export type User = {
   district: string | null;
 };
 
-export type ReportStatus = 'Pending' | 'In Progress' | 'Resolved' | 'Rejected';
+export type ReportStatus = 'Pending' | 'In Progress' | 'Resolved' | 'Rejected' | 'Archived';
 
 export type Urgency = 'Low' | 'Medium' | 'High';
 

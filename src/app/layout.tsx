@@ -3,6 +3,7 @@ import { Syne, Manrope } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import Bootstrapper from "@/components/Bootstrapper";
+import NotificationProvider from "@/components/NotificationProvider";
 import { Toaster } from "@/components/ui/sonner";
 
 const syne = Syne({
@@ -35,8 +36,10 @@ export default function RootLayout({
       <body className="font-manrope min-h-full antialiased">
         <Bootstrapper />
         <AuthProvider>
-          {children}
-          <Toaster richColors position="top-right" />
+          <NotificationProvider>
+            {children}
+            <Toaster richColors position="top-right" />
+          </NotificationProvider>
         </AuthProvider>
       </body>
     </html>

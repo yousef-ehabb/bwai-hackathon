@@ -97,17 +97,17 @@ export default function CitizenDashboard() {
   }).format(new Date());
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
+    <div className="p-4 sm:p-8 max-w-7xl mx-auto space-y-8 sm:space-y-12">
       {/* Header */}
       <div className="mb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
         <div>
-           <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3">{formattedDate}</p>
-           <h1 className="text-display-hero text-primary font-medium tracking-tight leading-none">
+           <p className="text-[10px] sm:text-[12px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2 sm:mb-3">{formattedDate}</p>
+           <h1 className="text-4xl sm:text-5xl md:text-display-hero text-primary font-medium tracking-tight leading-tight sm:leading-none">
              {greeting},<br />
              {currentUser?.name?.split(' ')[0]}
            </h1>
         </div>
-        <Button onClick={() => router.push('/citizen/report')} className="bg-brand-blue border-brand-blue text-white shadow-xl shadow-brand-blue/20">
+        <Button onClick={() => router.push('/citizen/report')} className="w-full sm:w-auto h-12 sm:h-auto bg-brand-blue border-brand-blue text-white shadow-xl shadow-brand-blue/20">
            Report New Issue <ArrowRight className="ml-2 h-5 w-5" />
         </Button>
       </div>

@@ -1,6 +1,6 @@
 import { getReports, getUsers } from './storage';
 import { Report, User } from './types';
-import { CityOverview, DistrictStats, CategoryStats, SLABreach } from './gov-types';
+import { CityOverview, DistrictStats, CategoryStats, SLABreach, DailySummary } from './gov-types';
 
 export function getCityOverviewStats(): CityOverview {
   const reports = getReports();
@@ -115,4 +115,25 @@ export function getSLABreaches(): SLABreach[] {
   });
   
   return breaches;
+}
+
+export function getDailyExecutiveSummary(): DailySummary {
+  const reports = getReports();
+  const now = new Date();
+  const last24h = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+  
+  const newReports = reports.filter(r => new Date(r.createdAt) >= last24h);
+  const resolved = reports.filter(r => r.status === 'Resolved' && r.resolvedAt && new Date(r.resolvedAt) >= last24h);
+  
+  const districtStats = getDistrictRankings();
+  const highestDelay = districtStats
+    .sort((a, b) => b.avgResolutionTime - a.avgResolutionTime)
+    .slice(0, 3)
+    .map(d => ({ district: d.districtName, avgDelay: d.avgResolutionTime }));
+
+  return {
+    totalNewReports: newReports.length,
+    resolvedIssues: resolved.length,
+    highestDelayDistricts: highestDelay
+  };
 }

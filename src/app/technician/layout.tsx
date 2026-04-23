@@ -22,7 +22,7 @@ export default function TechnicianLayout({ children }: { children: React.ReactNo
   if (!currentUser || currentUser.role !== 'technician') return null;
 
   return (
-    <div className="flex h-screen bg-[#0f172a]">
+    <div className="flex flex-col md:flex-row h-screen bg-[#0f172a]">
       <Sidebar role="technician" />
       <main className="flex-1 overflow-y-auto">{children}</main>
     </div>

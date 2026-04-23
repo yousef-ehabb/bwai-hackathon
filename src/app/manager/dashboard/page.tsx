@@ -8,6 +8,7 @@ import { Report } from '@/lib/types';
 import { TechnicianWorkload } from '@/lib/manager-types';
 import { MgrStatCard } from '@/components/shared/MgrStatCard';
 import { MgrSLAAlert } from '@/components/shared/MgrSLAAlert';
+import UrbanFixMap from '@/components/shared/UrbanFixMap';
 import { 
   FileText, 
   Clock, 
@@ -15,7 +16,8 @@ import {
   CheckCircle, 
   Users, 
   TrendingUp, 
-  ArrowUpRight 
+  ArrowUpRight,
+  MapPin
 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -57,14 +59,14 @@ export default function ManagerDashboard() {
   }
 
   return (
-    <div className="p-8 max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out">
+    <div className="p-4 sm:p-8 max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out space-y-8 sm:space-y-12">
       {/* Header */}
       <div className="mb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
         <div>
-           <p className="text-[12px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3">District Operations</p>
-            <h1 className="text-display-hero text-primary font-display font-medium tracking-tight leading-none mb-2">
-              Situation Room<br />
-              <span className="text-brand-blue uppercase text-3xl font-bold tracking-widest">{currentUser?.district}</span>
+           <p className="text-[10px] sm:text-[12px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2 sm:mb-3">District Operations</p>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-display-hero text-primary font-display font-medium tracking-tight leading-tight sm:leading-none mb-2">
+              Situation Room<br className="hidden sm:block" />
+              <span className="text-brand-blue uppercase text-2xl sm:text-3xl font-bold tracking-widest sm:ml-0"> {currentUser?.district}</span>
             </h1>
         </div>
         <div className="flex gap-4">
@@ -116,6 +118,17 @@ export default function ManagerDashboard() {
             trend="92%"
           />
         </div>
+      </div>
+
+      {/* District Heatmap */}
+      <div className="mb-12">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-display font-medium text-primary flex items-center gap-3">
+            <MapPin className="h-6 w-6 text-brand-blue" /> District Heatmap
+          </h2>
+          <p className="text-sm text-muted-foreground font-medium">Live incidents by location</p>
+        </div>
+        <UrbanFixMap reports={reports} />
       </div>
 
       {/* Quick Insights Row */}
