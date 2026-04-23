@@ -78,9 +78,9 @@ export default function Sidebar({ role }: { role: Role }) {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 px-4 py-[12px] rounded-full text-[14px] font-body font-medium transition-all duration-200",
+                "flex items-center gap-3 px-5 py-[14px] rounded-full text-[15px] font-display font-semibold transition-all duration-200 tracking-tight",
                 isActive
-                  ? "bg-primary text-white"
+                  ? "bg-primary text-white scale-[1.02]"
                   : "text-muted-foreground hover:bg-surface hover:text-primary"
               )}
             >

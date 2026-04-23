@@ -22,7 +22,7 @@ export default function ManagerLayout({ children }: { children: React.ReactNode 
   if (!currentUser || currentUser.role !== 'manager') return null;
 
   return (
-    <div className="flex h-screen bg-[#0f172a]">
+    <div className="flex h-screen bg-[#f9fafb]">
       <Sidebar role="manager" />
       <main className="flex-1 overflow-y-auto">{children}</main>
     </div>
