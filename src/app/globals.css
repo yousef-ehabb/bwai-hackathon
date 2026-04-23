@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+@theme {
+  /* Revolut Inspired Palette */
+  --color-background: #ffffff;
+  --color-foreground: #191c1f;
+
+  --color-surface: #f4f4f4;
+  --color-surface-dark: #191c1f;
+  
+  --color-primary: #191c1f;
+  --color-primary-foreground: #ffffff;
+  
+  --color-brand-blue: #494fdf;
+  --color-action-blue: #4f55f1;
+  
+  --color-success: #00a87e;
+  --color-danger: #e23b4a;
+  --color-warning: #ec7e00;
+  
+  --color-muted: #8d969e;
+  --color-muted-foreground: #505a63;
+  
+  --color-border: #c9c9cd;
+  
+  /* Fonts */
+  --font-display: "Syne", sans-serif; /* Fallback for Aeonik Pro */
+  --font-body: "Inter", sans-serif;
+
+  /* Radius */
+  --radius-lg: 20px;
+  --radius-md: 12px;
+  --radius-full: 9999px;
+}
+
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #191c1f;
+    --card: #ffffff;
+    --card-foreground: #191c1f;
+    --popover: #ffffff;
+    --popover-foreground: #191c1f;
+    --primary: #191c1f;
+    --primary-foreground: #ffffff;
+    --secondary: #f4f4f4;
+    --secondary-foreground: #191c1f;
+    --muted: #f4f4f4;
+    --muted-foreground: #505a63;
+    --accent: #f4f4f4;
+    --accent-foreground: #191c1f;
+    --destructive: #e23b4a;
+    --destructive-foreground: #ffffff;
+    --border: #c9c9cd;
+    --input: #c9c9cd;
+    --ring: #191c1f;
+  }
+
+  .dark {
+    --background: #191c1f;
+    --foreground: #ffffff;
+    --card: #191c1f;
+    --card-foreground: #ffffff;
+    --popover: #191c1f;
+    --popover-foreground: #ffffff;
+    --primary: #ffffff;
+    --primary-foreground: #191c1f;
+    --secondary: #2a2e33;
+    --secondary-foreground: #ffffff;
+    --muted: #2a2e33;
+    --muted-foreground: #8d969e;
+    --accent: #2a2e33;
+    --accent-foreground: #ffffff;
+    --destructive: #e23b4a;
+    --destructive-foreground: #ffffff;
+    --border: #33393f;
+    --input: #33393f;
+    --ring: #ffffff;
+  }
+
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    line-height: 1.5;
+    letter-spacing: 0.24px;
+    font-size: 16px;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* Revolut Typography Utilities */
+@layer utilities {
+  .text-display-mega {
+    font-size: clamp(3rem, 8vw, 8.5rem); /* Responsive 136px */
+    letter-spacing: -0.04em;
+    line-height: 1.0;
+  }
+  
+  .text-display-hero {
+    font-size: clamp(2.5rem, 6vw, 5rem); /* Responsive 80px */
+    letter-spacing: -0.02em;
+    line-height: 1.0;
+  }
+
+  .text-body-spaced {
+    letter-spacing: 0.24px;
+  }
+}
+
+/* Remove all shadows as per Revolut design principle */
+* {
+  box-shadow: none !important;
+}
+
+/* Gradient text variant for some pop */
+.text-gradient {
+  background: linear-gradient(to right, #494fdf, #e61e49);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
