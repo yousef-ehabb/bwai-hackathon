@@ -65,14 +65,24 @@ export function MgrAssignDialog({ isOpen, onClose, reportId, technicians, onAssi
           </div>
 
           {suggestedTech && !selectedTech && (
-            <div className="p-4 bg-[#00a87e]/10 border border-[#00a87e]/20 rounded-2xl flex items-start gap-3">
-               <AlertCircle className="h-5 w-5 text-[#00a87e] shrink-0 mt-0.5" />
-               <div>
-                  <p className="text-[11px] font-bold text-[#00a87e] uppercase tracking-wider mb-1">Recommendation</p>
-                  <p className="text-sm text-primary leading-relaxed">
-                     <span className="font-bold">{suggestedTech.name}</span> is currently the least busy with only {suggestedTech.activeTasks} active tasks.
-                  </p>
+            <div className="p-4 bg-[#00a87e]/10 border border-[#00a87e]/20 rounded-2xl flex flex-col gap-3">
+               <div className="flex items-start gap-3">
+                  <AlertCircle className="h-5 w-5 text-[#00a87e] shrink-0 mt-0.5" />
+                  <div>
+                     <p className="text-[11px] font-bold text-[#00a87e] uppercase tracking-wider mb-1">Recommended Dispatch</p>
+                     <p className="text-sm text-primary leading-relaxed">
+                        <span className="font-bold">{suggestedTech.name}</span> has the lightest workload ({suggestedTech.activeTasks} tasks).
+                     </p>
+                  </div>
                </div>
+               <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setSelectedTech(suggestedTech.id)}
+                className="w-full bg-[#00a87e]/5 border-[#00a87e]/20 text-[#00a87e] hover:bg-[#00a87e]/10 h-10 rounded-xl font-bold text-xs uppercase tracking-widest"
+               >
+                 Auto-Select {suggestedTech.name.split(' ')[0]}
+               </Button>
             </div>
           )}
         </div>

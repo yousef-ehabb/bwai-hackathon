@@ -7,6 +7,7 @@ import { Role } from '@/lib/types';
 import RoleBadge from '@/components/RoleBadge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { NotificationBell } from '@/components/NotificationBell';
 import {
   Zap,
   LayoutDashboard,
@@ -72,9 +73,12 @@ export default function Sidebar({ role, className }: { role: Role; className?: s
           </div>
           <span className="font-display text-lg font-bold text-primary tracking-tight">UrbanFix</span>
         </Link>
-        <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsOpen(false)}>
-          <X className="h-5 w-5" />
-        </Button>
+        <div className="flex items-center gap-2">
+            <NotificationBell />
+            <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsOpen(false)}>
+                <X className="h-5 w-5" />
+            </Button>
+        </div>
       </div>
 
       {/* Navigation */}
@@ -143,9 +147,12 @@ export default function Sidebar({ role, className }: { role: Role; className?: s
           </div>
           <span className="font-display text-lg font-bold text-primary tracking-tight">UrbanFix</span>
         </Link>
-        <Button variant="ghost" size="icon" onClick={() => setIsOpen(true)}>
-          <Menu className="h-6 w-6" />
-        </Button>
+        <div className="flex items-center gap-1">
+            <NotificationBell />
+            <Button variant="ghost" size="icon" onClick={() => setIsOpen(true)}>
+                <Menu className="h-6 w-6" />
+            </Button>
+        </div>
       </div>
 
       {/* Mobile Overlay */}

@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { addReport, getReports, getCategories } from '@/lib/storage';
+import { followReport } from '@/lib/follow-system';
 import { Report, ReportStatus, Urgency } from '@/lib/types';
 import { haversineDistance } from '@/lib/geo';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -75,6 +76,7 @@ export default function ReportPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedId, setSubmittedId] = useState('');
   const [showDuplicateDialog, setShowDuplicateDialog] = useState(false);
+  const [duplicateFound, setDuplicateFound] = useState<Report | null>(null);
   
   const [form, setForm] = useState<FormState>({
     category: '',
@@ -165,12 +167,13 @@ export default function ReportPage() {
 
   const checkForDuplicates = () => {
     const allReports = getReports();
-    const active = allReports.filter((r) => r.status !== 'Resolved' && r.category === form.category);
+    const active = allReports.filter((r) => r.status !== 'Resolved' && r.status !== 'Rejected' && r.category === form.category);
     const nearby = active.find((r) => 
       haversineDistance(form.lat!, form.lng!, r.gps.lat, r.gps.lng) <= 50
     );
     
     if (nearby) {
+      setDuplicateFound(nearby);
       setShowDuplicateDialog(true);
       return true;
     }
@@ -535,7 +538,13 @@ export default function ReportPage() {
                 <Button 
                     variant="outline" 
                     className="w-full border-[#334155] text-slate-300"
-                    onClick={() => router.push('/citizen/my-reports')}
+                    onClick={() => {
+                        if (duplicateFound && currentUser) {
+                            followReport(duplicateFound.id, currentUser.id);
+                            toast.success('You are now following this report.');
+                            router.push('/citizen/my-reports');
+                        }
+                    }}
                 >
                     Follow Existing Report
                 </Button>

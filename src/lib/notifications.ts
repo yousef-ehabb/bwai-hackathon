@@ -8,7 +8,7 @@
 import { Report, ReportStatus } from './types';
 
 // Notification Types
-export type NotificationType = 
+export type NotificationType =
   | 'status_change'
   | 'task_assigned'
   | 'task_reassigned'
@@ -55,15 +55,15 @@ const defaultSettings: NotificationSettings = {
 
 export function getNotifications(userId?: string): Notification[] {
   if (typeof window === 'undefined') return [];
-  
+
   const all = JSON.parse(localStorage.getItem(NOTIFICATIONS_KEY) || '[]') as Notification[];
-  
+
   if (userId) {
-    return all.filter(n => n.userId === userId).sort((a, b) => 
+    return all.filter(n => n.userId === userId).sort((a, b) =>
       new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
   }
-  
+
   return all;
 }
 
@@ -73,24 +73,24 @@ export function addNotification(notification: Omit<Notification, 'id' | 'created
     id: `notif-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
     createdAt: new Date().toISOString(),
   };
-  
+
   const all = getNotifications();
   all.unshift(newNotification);
-  
+
   // Keep only last 100 notifications per user to prevent storage bloat
   const userNotifications = all.filter(n => n.userId === notification.userId);
   const otherNotifications = all.filter(n => n.userId !== notification.userId);
-  
+
   const trimmedUserNotifications = userNotifications.slice(0, 100);
-  
+
   localStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify([...trimmedUserNotifications, ...otherNotifications]));
-  
+
   return newNotification;
 }
 
 export function markNotificationAsRead(notificationId: string): void {
   const all = getNotifications();
-  const updated = all.map(n => 
+  const updated = all.map(n =>
     n.id === notificationId ? { ...n, read: true } : n
   );
   localStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(updated));
@@ -98,7 +98,7 @@ export function markNotificationAsRead(notificationId: string): void {
 
 export function markAllAsRead(userId: string): void {
   const all = getNotifications();
-  const updated = all.map(n => 
+  const updated = all.map(n =>
     n.userId === userId ? { ...n, read: true } : n
   );
   localStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(updated));
@@ -133,24 +133,24 @@ export async function requestBrowserPushPermission(): Promise<boolean> {
     console.warn('Browser does not support notifications');
     return false;
   }
-  
+
   const permission = await Notification.requestPermission();
   const granted = permission === 'granted';
-  
+
   if (granted) {
     updateNotificationSettings({ browserPushEnabled: true });
   }
-  
+
   return granted;
 }
 
 export function sendBrowserPush(notification: Omit<Notification, 'id' | 'createdAt'>): void {
   const settings = getNotificationSettings();
-  
+
   if (!settings.browserPushEnabled) return;
   if (settings.mutedTypes.includes(notification.type)) return;
   if (!('Notification' in window) || Notification.permission !== 'granted') return;
-  
+
   // Use Service Worker for persistent notifications if available
   if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
     navigator.serviceWorker.controller.postMessage({
@@ -194,7 +194,7 @@ export function createStatusChangeNotification(
     'Resolved': 'has been resolved! 🎉',
     'Rejected': 'was rejected',
   };
-  
+
   return {
     userId,
     type: 'status_change',
@@ -281,10 +281,10 @@ const notificationSound = typeof window !== 'undefined' ? new Audio('/notificati
 export function playNotificationSound(priority: NotificationPriority): void {
   const settings = getNotificationSettings();
   if (!settings.soundEnabled || !notificationSound) return;
-  
+
   // Only play sound for medium+ priority
   if (priority === 'low') return;
-  
+
   notificationSound.volume = priority === 'critical' ? 1.0 : 0.5;
   notificationSound.play().catch(() => {
     // Ignore autoplay restrictions

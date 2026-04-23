@@ -12,7 +12,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { useNotifications } from '@/hooks/useNotifications';
 import { toast } from 'sonner';
 import { getReports } from '@/lib/storage';
-import { Bell } from 'lucide-react';
+import { isUserFollowingReport } from '@/lib/follow-system';
+import { Bell, UserCheck, ShieldAlert, CheckCircle } from 'lucide-react';
 import { useState, useRef } from 'react';
 
 export default function NotificationProvider({ children }: { children: React.ReactNode }) {
@@ -112,21 +113,41 @@ export default function NotificationProvider({ children }: { children: React.Rea
       const lastCount = lastReportCountRef.current;
       const lastStatuses = lastStatusesRef.current;
       
-      if (lastCount !== null && currentReports.length > lastCount) {
-        const newCount = currentReports.length - lastCount;
-        toast('New Infrastructure Alert', {
-          description: `${newCount} new issue${newCount > 1 ? 's' : ''} reported to authorities.`,
-          icon: <Bell className="h-4 w-4 text-blue-500" />,
-        });
+      // 1. New Report Alerts (Managers Only)
+      if (currentUser.role === 'manager' && lastCount !== null && currentReports.length > lastCount) {
+        const newInDistrict = currentReports.filter((r, i) => i >= lastCount && r.district === currentUser.district);
+        if (newInDistrict.length > 0) {
+          toast('New District Incident', {
+            description: `${newInDistrict.length} new report${newInDistrict.length > 1 ? 's' : ''} in ${currentUser.district}.`,
+            icon: <ShieldAlert className="h-4 w-4 text-amber-500" />,
+          });
+        }
       }
 
+      // 2. Status & Assignment Changes
       currentReports.forEach(r => {
         const oldStatus = lastStatuses[r.id];
-        if (oldStatus && oldStatus !== r.status) {
-          toast('Dispatch Status Change', {
-            description: `Issue #${r.id.slice(-4)} moved to ${r.status}.`,
-            icon: <Bell className="h-4 w-4 text-emerald-500" />,
+        const isOwner = r.citizenId === currentUser.id;
+        const isFollower = isUserFollowingReport(r.id, currentUser.id);
+        const isAssignedTech = r.assignedTo === currentUser.id;
+
+        // Status Change Alert (Owners & Followers)
+        if (oldStatus && oldStatus !== r.status && (isOwner || isFollower)) {
+          toast('Report Status Update', {
+            description: `Issue #${r.id.slice(-4)} (${r.category}) is now ${r.status}.`,
+            icon: r.status === 'Resolved' ? <CheckCircle className="h-4 w-4 text-emerald-500" /> : <Bell className="h-4 w-4 text-blue-500" />,
           });
+        }
+
+        // Assignment Alert (Technicians Only)
+        // Detect if assignedTo changed to current user
+        const oldReport = getReports().find(prev => prev.id === r.id); // This is actually tricky with current logic
+        // Let's use lastStatuses to track assignedTo if needed, but for now we'll check if status is "In Progress" and it's them
+        if (currentUser.role === 'technician' && isAssignedTech && oldStatus === 'Pending' && r.status === 'In Progress') {
+           toast('New Task Assigned', {
+             description: `You have been assigned a new ${r.category} task in ${r.district}.`,
+             icon: <UserCheck className="h-4 w-4 text-indigo-500" />,
+           });
         }
       });
 
@@ -135,6 +156,9 @@ export default function NotificationProvider({ children }: { children: React.Rea
       const newStatuses: Record<string, string> = {};
       currentReports.forEach(r => newStatuses[r.id] = r.status);
       lastStatusesRef.current = newStatuses;
+      
+      // Trigger refresh of notification state in hook
+      refresh();
     }, 10000);
 
     return () => clearInterval(interval);

@@ -80,14 +80,14 @@ export function seedHotspotReports() {
   const hotspotCenter = { lat: 30.0444, lng: 31.2357 }; // Downtown Cairo
   const categories = ['Road Damage', 'Water Leak', 'Electricity Outage', 'Street Lighting'];
   const districts = ['Cairo Central', 'Giza North', 'Nasr City'];
-  
+
   const newMockReports: Report[] = [];
 
   for (let i = 0; i < 40; i++) {
     // Create a dense cluster around the center (within ~1km)
     const latOffset = (Math.random() - 0.5) * 0.02;
     const lngOffset = (Math.random() - 0.5) * 0.02;
-    
+
     newMockReports.push({
       id: `seed-${Date.now()}-${i}`,
       citizenId: 'seed-user',

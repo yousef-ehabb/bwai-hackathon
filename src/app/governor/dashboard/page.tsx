@@ -10,6 +10,7 @@ import GovStatCard from '@/components/shared/GovStatCard';
 import GovDistrictRanking from '@/components/shared/GovDistrictRanking';
 import GovDailySummary from '@/components/shared/GovDailySummary';
 import UrbanFixMap from '@/components/shared/UrbanFixMap';
+import GovAISummary from '@/components/shared/GovAISummary';
 import {
   FileText,
   AlertTriangle,
@@ -159,6 +160,14 @@ export default function GovernorDashboard() {
         </div>
         <UrbanFixMap reports={reports} />
       </div>
+
+      {/* AI Executive Summary */}
+      <GovAISummary 
+        overview={overview} 
+        rankings={rankings} 
+        breaches={breaches} 
+        summary={summary} 
+      />
 
       {/* Main Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
